@@ -29,7 +29,13 @@ class CameraViewController: UIViewController, AVCaptureDataOutputSynchronizerDel
     
     @IBOutlet weak private var touchDepth: UILabel!
     
+    private var shooting = false
+    
     @IBOutlet weak var autoPanningSwitch: UISwitch!
+    
+    @IBAction func Shoot(_ sender: Any) {
+        shooting = true
+    }
     
     private enum SessionSetupResult {
         case success
@@ -806,16 +812,19 @@ class CameraViewController: UIViewController, AVCaptureDataOutputSynchronizerDel
         
         
         if let UIImageVideoPixelBuffer = UIImage(pixelBuffer: videoPixelBuffer){
-               let photoView : PhotoView! = PhotoView()
-               if let UIImagedepthPixelBuffer : UIImage = photoView.depthBuffer(toImage: depthPixelBuffer){
-                   // depth image save
-                   UIImageWriteToSavedPhotosAlbum(UIImagedepthPixelBuffer, nil, nil, nil)
-                   usleep(5000)  //5ms
-                   // color image save
-                   UIImageWriteToSavedPhotosAlbum(UIImageVideoPixelBuffer, nil, nil, nil)
-                   usleep(5000)  //5ms
-               }
-           }
+            let photoView : PhotoView! = PhotoView()
+            if let UIImagedepthPixelBuffer : UIImage = photoView.depthBuffer(toImage: depthPixelBuffer){
+                if (shooting) {
+                    shooting=false
+                    // depth image save
+                    UIImageWriteToSavedPhotosAlbum(UIImagedepthPixelBuffer, nil, nil, nil)
+                    usleep(5000)  //5ms
+                    // color image save
+                    UIImageWriteToSavedPhotosAlbum(UIImageVideoPixelBuffer, nil, nil, nil)
+                    usleep(5000)  //5ms
+                }
+            }
+        }
         
         if JETEnabled {
             if !videoDepthConverter.isPrepared {

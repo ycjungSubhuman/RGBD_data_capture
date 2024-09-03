@@ -1,5 +1,8 @@
 # RGB-D Data Capture App for iPhone TrueDepth Camera
 
+Changes
+- Original app automaticall captures the stream of RGBD frames
+- This fork: press "Shoot" button to capture one frame
 
 > The code is modified from Apple Sample Code: https://developer.apple.com/documentation/avfoundation/cameras_and_media_capture/streaming_depth_data_from_the_truedepth_camera
 
